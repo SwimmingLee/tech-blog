@@ -641,7 +641,67 @@ https://m.blog.naver.com/PostView.nhn?blogId=alice_k106&logNo=220984112963&proxy
 
 ## Dockerfile만들기 
 
-흠 2-3시간? 
+### 아파치 서버 이미지를 만드는 도커파일 만들기
+
+```bash
+$ mkdir dockerfile && cd dockerfile
+$ echo test >> test.html
+
+$ ls
+test.html
+```
+
+
+
+
+
+```bash
+$ vi Dockerfile
+
+FROM ubuntu:16.04
+MAINTAINER swimminglee
+LABEL "purpose"="pratice"
+RUN apt-get update
+RUN apt-get install apache2 -y
+ADD test.html /var/www/html
+WORKDIR /var/www/html
+RUN ["/bin/bash", "-c", "echo hello >> test2.html"]
+EXPOSE 80
+CMD apachectl -DFOREGROUND
+```
+
+아파치를 설치하고 거기에다가 테스트 html을 생성한 다음에 컨테이너가 사용할 포트를 80으로 지정해줍니다.
+
+
+
+```bash
+$ docker build -t mybuild:0.0 ./
+```
+
+- -t 옵션: 생성될 이미지 이름, 이 옵션을 사용하지않으면 16진수 형태의 이름으로 이미지가 저장되므로 가급적으면 사용하는게 좋다. 
+
+build 명령어 끝에는 Dockerfile이 저장된 경로를 입력합니다. 일반적으로 로컬에 저장된 도커파일을 이용하지만, 외부 uRL 로부터 도커파일의 내요을 가져와 빌드할 수 있습니다. 
+
+
+
+```bash
+$ docker run -d -P --name myserver mybuild:0.0
+3984e652fa4042dadc19eeb7673075f02f82a76720ba72bc73fca65c9a5049e5
+
+```
+
+- -P 옵션 : 이미지에 설정된 EXPOSE의 모든 포트를 호스트에 연결하도록 설정함
+
+
+
+docker port 명령어를 통해서 포트가 어떻게 연결됬는지 확인할 수 있따. 
+
+```bash
+$ docker port myserver
+80/tcp -> 0.0.0.0:32770
+```
+
+
 
 
 
