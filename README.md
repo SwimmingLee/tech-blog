@@ -1,7 +1,7 @@
 # tech-blog
 
   ### batch file 사용 정리
-
+windows
 [네트워크 링크!](네트워크.md)
 
 ### 네트워크
